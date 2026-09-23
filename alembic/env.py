@@ -9,9 +9,20 @@ from sqlmodel import SQLModel
 # Importar los modelos que se quieren migrar aqui
 from src.models.product_model import Product
 
+#importamos os y dotenv para usar las variables de entorno
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+#se carga la url de la base de datos
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

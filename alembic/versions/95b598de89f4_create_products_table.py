@@ -1,8 +1,8 @@
-"""first_migration
+"""create_products_table
 
-Revision ID: fd46bdcc99d0
+Revision ID: 95b598de89f4
 Revises: 
-Create Date: 2026-09-23 07:00:01.807511
+Create Date: 2026-09-23 10:51:43.016581
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'fd46bdcc99d0'
+revision: str = '95b598de89f4'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,6 +26,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('price', sa.Float(), nullable=False),
+    sa.Column('category', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
