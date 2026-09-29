@@ -3,7 +3,6 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from alembic import context
 from sqlmodel import SQLModel
 
 # Importar los modelos que se quieren migrar aqui
@@ -20,7 +19,13 @@ load_dotenv()
 config = context.config
 
 #se carga la url de la base de datos
-DATABASE_URL = os.getenv("DATABASE_URL")
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+
+
+DATABASE_URL=(f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:{POSTGRES_PORT}/{POSTGRES_DB}") 
 if DATABASE_URL:
     config.set_main_option("sqlalchemy.url", DATABASE_URL)
 

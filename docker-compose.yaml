@@ -1,0 +1,46 @@
+services:
+  # 1. Servicio de Base de Datos PostgreSQL 16
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      # Volumen persistente: evita que los datos se borren al apagar el contenedor
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Servicio de Backend FastAPI
+  backend:
+    build: .
+    container_name: fastapi_backend
+    restart: on-failure:5
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        # Espera a que PostgreSQL esté realmente listo para recibir conexiones
+        condition: service_healthy
+    healthcheck:
+      # Verifica que el puerto o endpoint de salud responda; si no tienes curl, usa python
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  postgres_data:
