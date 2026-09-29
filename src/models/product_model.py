@@ -13,6 +13,8 @@ class ProductBase(SQLModel):
     price: float = Field(ge=10000, description="Precio mínimo del producto (al menos 10.000)")
     category: str = Field(min_length=1, description="Categoría del producto")
     quantity: int = Field(ge=1, description="Cantidad en stock (mínimo 1 unidad)")
+    # actualización carga de imagenes para almacenar en s3
+    image_url: str | None = Field(default=None, description="URL publica de la imagen en s3")
 
     @field_validator("name")
     @classmethod
