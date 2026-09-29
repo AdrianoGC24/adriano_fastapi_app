@@ -134,3 +134,7 @@ def delete_product(id: int, session: SessionDep):
     session.delete(product)
     session.commit()
     return {"mensaje": "Producto eliminado correctamente"}
+
+@app.get("/health", summary="Verificar estado de salud de la API")
+def health_check():
+    return {"status": "ok", "message": "La API está funcionando correctamente"}
